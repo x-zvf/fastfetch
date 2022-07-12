@@ -52,4 +52,7 @@ void ffPrintTitle(FFinstance* instance)
     putchar('@');
     printTitlePart(instance, &result->hostname);
     putchar('\n');
+
+    ffStrbufDestroy(&result->userName);
+    ffStrbufDestroy(&result->hostname);
 }
