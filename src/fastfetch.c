@@ -1373,5 +1373,7 @@ int main(int argc, const char** argv)
         startIndex = colonIndex + 1;
     }
 
+    ffStrbufDestroy(&data.structure);
+    ffValuestoreDelete(&data.valuestore);
     ffFinish(&instance);
 }
