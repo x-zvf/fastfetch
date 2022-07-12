@@ -1375,5 +1375,6 @@ int main(int argc, const char** argv)
 
     ffStrbufDestroy(&data.structure);
     ffValuestoreDelete(&data.valuestore);
+    ffDestroyInstance(&instance);
     ffFinish(&instance);
 }

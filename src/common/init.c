@@ -24,8 +24,10 @@ static void initConfigDirs(FFstate* state)
     }
 
     #define FF_ENSURE_ONLY_ONCE_IN_LIST(element) \
-        if(ffListFirstIndexComp(&state->configDirs, element, strbufEqualsAdapter) < state->configDirs.length - 1) \
-            --state->configDirs.length;
+        if(ffListFirstIndexComp(&state->configDirs, element, strbufEqualsAdapter) < state->configDirs.length - 1) { \
+            --state->configDirs.length; \
+            ffStrbufDestroy(element); \
+        }
 
     FFstrbuf* userConfigHome = ffListAdd(&state->configDirs);
     ffStrbufInitA(userConfigHome, 64);
@@ -57,6 +59,7 @@ static void initConfigDirs(FFstate* state)
 
         startIndex = colonIndex + 1;
     }
+    ffStrbufDestroy(&xdgConfigDirs);
 
     FFstrbuf* systemConfigHome = ffListAdd(&state->configDirs);
     ffStrbufInitA(systemConfigHome, 64);
@@ -214,6 +217,15 @@ void ffInitInstance(FFinstance* instance)
 {
     initState(&instance->state);
     defaultConfig(instance);
+}
+
+void ffDestroyInstance(FFinstance *instance)
+{
+    for(uint32_t i = 0; i < instance->state.configDirs.length; i++)
+        ffStrbufDestroy(ffListGet(&instance->state.configDirs, i));
+    ffListDestroy(&instance->state.configDirs);
+    for(uint8_t i = 0; i < (uint8_t) FASTFETCH_LOGO_MAX_COLORS; ++i)
+        ffStrbufDestroy(&instance->config.logo.colors[i]);
 }
 
 static volatile bool ffDisableLinewrap = true;

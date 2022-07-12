@@ -407,6 +407,7 @@ typedef enum FFInitState
 
 //common/init.c
 void ffInitInstance(FFinstance* instance);
+void ffDestroyInstance(FFinstance* instance);
 void ffStart(FFinstance* instance);
 void ffFinish(FFinstance* instance);
 
